@@ -78,7 +78,29 @@ commit;
 
 
 
+-----------------------------------------------------
+--we update a trader's name to "lab" for a Data Governance demo
+--last_query_id and result_scan lets us manipulate the resultset of a previous query
+    
+    select pm, count(*) cnt
+    from trader
+    group by pm
+    having count(*) > 2
+    order by 2, 1
+    limit 1;
 
+    set q = last_query_id(); 
+
+    update trader set trader = 'lab' where trader in
+    (
+        select trader
+        from trader t
+        inner join (
+          select pm from table(result_scan($q))
+        ) pm on t.pm = pm.pm
+        order by trader
+        limit 1
+    );
 
 
       
@@ -255,7 +277,7 @@ commit;
 ----------------------------------------------------------------------------------------------------------
 --size down to save money
   
-        alter warehouse finservam_datascience_wh set warehouse_size = 'small';
+        alter warehouse finservam_datascience_wh set warehouse_size = 'xsmall';
         
         //option to shutdown
         alter warehouse finservam_datascience_wh suspend;
