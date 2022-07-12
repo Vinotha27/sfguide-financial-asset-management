@@ -25,3 +25,4 @@ select distinct date from finservam.public.trade order by 1;
 -- :fssymbol
 select distinct symbol from finservam.public.trade order by 1;
 
+
